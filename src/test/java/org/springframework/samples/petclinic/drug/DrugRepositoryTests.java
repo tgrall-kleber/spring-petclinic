@@ -30,26 +30,26 @@ import org.springframework.data.domain.Sort;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class DrugRepositoryTests {
 
-@Autowired
-private DrugRepository drugs;
+	@Autowired
+	private DrugRepository drugs;
 
-@Test
-void shouldFindAllDrugsPagedAndSortedByName() {
-Page<Drug> page = this.drugs.findAll(PageRequest.of(0, 5, Sort.by("name").ascending()));
+	@Test
+	void shouldFindAllDrugsPagedAndSortedByName() {
+		Page<Drug> page = this.drugs.findAll(PageRequest.of(0, 5, Sort.by("name").ascending()));
 
-assertThat(page.getTotalElements()).isEqualTo(30);
-assertThat(page.getContent()).hasSize(5);
-assertThat(page.getContent()).extracting(Drug::getName)
-.containsExactly("Amantadine", "Amoxicillin", "Buprenorphine", "Carprofen", "Cefovecin");
-}
+		assertThat(page.getTotalElements()).isEqualTo(30);
+		assertThat(page.getContent()).hasSize(5);
+		assertThat(page.getContent()).extracting(Drug::getName)
+			.containsExactly("Amantadine", "Amoxicillin", "Buprenorphine", "Carprofen", "Cefovecin");
+	}
 
-@Test
-void shouldFindDrugsByNameOrCategory() {
-Page<Drug> page = this.drugs.findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase("dermatology",
-"dermatology", PageRequest.of(0, 5, Sort.by("name").ascending()));
+	@Test
+	void shouldFindDrugsByNameOrCategory() {
+		Page<Drug> page = this.drugs.findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase("dermatology",
+				"dermatology", PageRequest.of(0, 5, Sort.by("name").ascending()));
 
-assertThat(page.getTotalElements()).isEqualTo(5);
-assertThat(page.getContent()).extracting(Drug::getCategory).containsOnly("Dermatology");
-}
+		assertThat(page.getTotalElements()).isEqualTo(5);
+		assertThat(page.getContent()).extracting(Drug::getCategory).containsOnly("Dermatology");
+	}
 
 }

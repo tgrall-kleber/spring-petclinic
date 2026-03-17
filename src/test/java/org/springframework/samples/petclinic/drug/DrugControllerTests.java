@@ -49,77 +49,81 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisabledInAotMode
 class DrugControllerTests {
 
-@Autowired
-private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-@MockitoBean
-private DrugRepository drugs;
+	@MockitoBean
+	private DrugRepository drugs;
 
-private Drug amoxicillin() {
-Drug drug = new Drug();
-drug.setId(1);
-drug.setName("Amoxicillin");
-drug.setCategory("Antibiotic");
-drug.setForm("Tablet");
-drug.setPrice(new BigDecimal("18.50"));
-drug.setDescription("Broad-spectrum antibiotic for common bacterial infections.");
-return drug;
-}
+	private Drug amoxicillin() {
+		Drug drug = new Drug();
+		drug.setId(1);
+		drug.setName("Amoxicillin");
+		drug.setCategory("Antibiotic");
+		drug.setForm("Tablet");
+		drug.setPrice(new BigDecimal("18.50"));
+		drug.setDescription("Broad-spectrum antibiotic for common bacterial infections.");
+		return drug;
+	}
 
-private Drug meloxicam() {
-Drug drug = new Drug();
-drug.setId(2);
-drug.setName("Meloxicam");
-drug.setCategory("Anti-inflammatory");
-drug.setForm("Suspension");
-drug.setPrice(new BigDecimal("23.50"));
-drug.setDescription("Oral NSAID for inflammation and osteoarthritis pain.");
-return drug;
-}
+	private Drug meloxicam() {
+		Drug drug = new Drug();
+		drug.setId(2);
+		drug.setName("Meloxicam");
+		drug.setCategory("Anti-inflammatory");
+		drug.setForm("Suspension");
+		drug.setPrice(new BigDecimal("23.50"));
+		drug.setDescription("Oral NSAID for inflammation and osteoarthritis pain.");
+		return drug;
+	}
 
-@BeforeEach
-void setup() {
-given(this.drugs.findAll(any(Pageable.class))).willReturn(new PageImpl<>(List.of(amoxicillin(), meloxicam()),
-PageRequest.of(0, 5), 8));
-given(this.drugs.findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase(eq("pain"), eq("pain"),
-any(Pageable.class))).willReturn(new PageImpl<>(List.of(meloxicam()), PageRequest.of(0, 5), 1));
-given(this.drugs.findById(1)).willReturn(Optional.of(amoxicillin()));
-}
+	@BeforeEach
+	void setup() {
+		given(this.drugs.findAll(any(Pageable.class)))
+			.willReturn(new PageImpl<>(List.of(amoxicillin(), meloxicam()), PageRequest.of(0, 5), 8));
+		given(this.drugs.findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase(eq("pain"), eq("pain"),
+				any(Pageable.class)))
+			.willReturn(new PageImpl<>(List.of(meloxicam()), PageRequest.of(0, 5), 1));
+		given(this.drugs.findById(1)).willReturn(Optional.of(amoxicillin()));
+	}
 
-@Test
-void initFindForm() throws Exception {
-this.mockMvc.perform(get("/drugs/find"))
-.andExpect(status().isOk())
-.andExpect(model().attributeExists("q"))
-.andExpect(view().name("drugs/findDrugs"));
-}
+	@Test
+	void initFindForm() throws Exception {
+		this.mockMvc.perform(get("/drugs/find"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("q"))
+			.andExpect(view().name("drugs/findDrugs"));
+	}
 
-@Test
-void showDrugListHtml() throws Exception {
-this.mockMvc.perform(get("/drugs.html").param("q", "pain").param("page", "1"))
-.andExpect(status().isOk())
-.andExpect(model().attributeExists("listDrugs"))
-.andExpect(model().attribute("q", "pain"))
-.andExpect(view().name("drugs/drugList"));
-}
+	@Test
+	void showDrugListHtml() throws Exception {
+		this.mockMvc.perform(get("/drugs.html").param("q", "pain").param("page", "1"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("listDrugs"))
+			.andExpect(model().attribute("q", "pain"))
+			.andExpect(view().name("drugs/drugList"));
+	}
 
-@Test
-void showDrugDetail() throws Exception {
-this.mockMvc.perform(get("/drugs/{drugId}", 1))
-.andExpect(status().isOk())
-.andExpect(model().attribute("drug", hasProperty("name", is("Amoxicillin"))))
-.andExpect(view().name("drugs/drugDetails"));
-}
+	@Test
+	void showDrugDetail() throws Exception {
+		this.mockMvc.perform(get("/drugs/{drugId}", 1))
+			.andExpect(status().isOk())
+			.andExpect(model().attribute("drug", hasProperty("name", is("Amoxicillin"))))
+			.andExpect(view().name("drugs/drugDetails"));
+	}
 
-@Test
-void showResourcesDrugList() throws Exception {
-this.mockMvc.perform(get("/drugs").param("q", "pain").param("page", "1").param("size", "2")
-.accept(MediaType.APPLICATION_JSON))
-.andExpect(status().isOk())
-.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-.andExpect(jsonPath("$.drugList[0].id").value(2))
-.andExpect(jsonPath("$.query").value("pain"))
-.andExpect(jsonPath("$.totalItems").value(1));
-}
+	@Test
+	void showResourcesDrugList() throws Exception {
+		this.mockMvc
+			.perform(get("/drugs").param("q", "pain")
+				.param("page", "1")
+				.param("size", "2")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.drugList[0].id").value(2))
+			.andExpect(jsonPath("$.query").value("pain"))
+			.andExpect(jsonPath("$.totalItems").value(1));
+	}
 
 }

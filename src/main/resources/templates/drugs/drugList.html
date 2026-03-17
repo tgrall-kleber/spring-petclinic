@@ -38,7 +38,7 @@
       </tr>
       <tr th:each="drug : ${listDrugs}">
         <td>
-          <a th:href="@{/drugs/__${drug.id}__}" th:text="${drug.name}">Drug Name</a>
+          <a th:href="@{/drugs/{drugId}(drugId=${drug.id},q=${q},page=${currentPage})}" th:text="${drug.name}">Drug Name</a>
         </td>
         <td th:text="${drug.category}">Category</td>
         <td th:text="${drug.form}">Form</td>

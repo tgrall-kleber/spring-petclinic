@@ -36,70 +36,70 @@ import jakarta.validation.constraints.Size;
 @Table(name = "drugs")
 public class Drug extends BaseEntity {
 
-@Column(name = "name", length = 80, nullable = false)
-@NotBlank
-@Size(max = 80)
-private String name;
+	@Column(name = "name", length = 80, nullable = false)
+	@NotBlank
+	@Size(max = 80)
+	private String name;
 
-@Column(name = "category", length = 80, nullable = false)
-@NotBlank
-@Size(max = 80)
-private String category;
+	@Column(name = "category", length = 80, nullable = false)
+	@NotBlank
+	@Size(max = 80)
+	private String category;
 
-@Column(name = "form", length = 40, nullable = false)
-@NotBlank
-@Size(max = 40)
-private String form;
+	@Column(name = "form", length = 40, nullable = false)
+	@NotBlank
+	@Size(max = 40)
+	private String form;
 
-@Column(name = "price", precision = 5, scale = 2, nullable = false)
-@NotNull
-@DecimalMin("0.00")
-@DecimalMax("999.99")
-@Digits(integer = 3, fraction = 2)
-private BigDecimal price;
+	@Column(name = "price", precision = 5, scale = 2, nullable = false)
+	@NotNull
+	@DecimalMin("0.00")
+	@DecimalMax("999.99")
+	@Digits(integer = 3, fraction = 2)
+	private BigDecimal price;
 
-@Column(name = "description", length = 255)
-@Size(max = 255)
-private String description;
+	@Column(name = "description", length = 255)
+	@Size(max = 255)
+	private String description;
 
-public String getName() {
-return this.name;
-}
+	public String getName() {
+		return this.name;
+	}
 
-public void setName(String name) {
-this.name = name;
-}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-public String getCategory() {
-return this.category;
-}
+	public String getCategory() {
+		return this.category;
+	}
 
-public void setCategory(String category) {
-this.category = category;
-}
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
-public String getForm() {
-return this.form;
-}
+	public String getForm() {
+		return this.form;
+	}
 
-public void setForm(String form) {
-this.form = form;
-}
+	public void setForm(String form) {
+		this.form = form;
+	}
 
-public BigDecimal getPrice() {
-return this.price;
-}
+	public BigDecimal getPrice() {
+		return this.price;
+	}
 
-public void setPrice(BigDecimal price) {
-this.price = price;
-}
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
 
-public String getDescription() {
-return this.description;
-}
+	public String getDescription() {
+		return this.description;
+	}
 
-public void setDescription(String description) {
-this.description = description;
-}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 }

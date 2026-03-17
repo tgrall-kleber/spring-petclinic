@@ -34,72 +34,74 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 class DrugController {
 
-private static final int DEFAULT_PAGE_SIZE = 5;
+	private static final int DEFAULT_PAGE_SIZE = 5;
 
-private final DrugRepository drugs;
+	private final DrugRepository drugs;
 
-DrugController(DrugRepository drugs) {
-this.drugs = drugs;
-}
+	DrugController(DrugRepository drugs) {
+		this.drugs = drugs;
+	}
 
-@GetMapping("/drugs/find")
-public String initFindForm(Model model) {
-model.addAttribute("q", "");
-return "drugs/findDrugs";
-}
+	@GetMapping("/drugs/find")
+	public String initFindForm(Model model) {
+		model.addAttribute("q", "");
+		return "drugs/findDrugs";
+	}
 
-@GetMapping("/drugs.html")
-public String showDrugList(@RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "1") int page,
-Model model) {
-Page<Drug> paginated = findPaginated(page, DEFAULT_PAGE_SIZE, q);
-return addPaginationModel(page, normalizeQuery(q), paginated, model);
-}
+	@GetMapping("/drugs.html")
+	public String showDrugList(@RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "1") int page,
+			Model model) {
+		int currentPage = Math.max(page, 1);
+		Page<Drug> paginated = findPaginated(currentPage, DEFAULT_PAGE_SIZE, q);
+		return addPaginationModel(currentPage, normalizeQuery(q), paginated, model);
+	}
 
-@GetMapping("/drugs/{drugId}")
-public String showDrug(@PathVariable("drugId") int drugId, Model model) {
-Drug drug = this.drugs.findById(drugId)
-.orElseThrow(() -> new IllegalArgumentException("Drug not found with id: " + drugId));
-model.addAttribute("drug", drug);
-return "drugs/drugDetails";
-}
+	@GetMapping("/drugs/{drugId}")
+	public String showDrug(@PathVariable("drugId") int drugId, Model model) {
+		Drug drug = this.drugs.findById(drugId)
+			.orElseThrow(() -> new IllegalArgumentException("Drug not found with id: " + drugId));
+		model.addAttribute("drug", drug);
+		return "drugs/drugDetails";
+	}
 
-@GetMapping("/drugs")
-public @ResponseBody Drugs showResourcesDrugList(@RequestParam(defaultValue = "") String q,
-@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size) {
-Page<Drug> paginated = findPaginated(page, size, q);
-Drugs response = new Drugs();
-response.getDrugList().addAll(paginated.getContent());
-response.setCurrentPage(page);
-response.setTotalPages(paginated.getTotalPages());
-response.setTotalItems(paginated.getTotalElements());
-response.setPageSize(paginated.getSize());
-response.setQuery(normalizeQuery(q));
-return response;
-}
+	@GetMapping("/drugs")
+	public @ResponseBody Drugs showResourcesDrugList(@RequestParam(defaultValue = "") String q,
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size) {
+		int currentPage = Math.max(page, 1);
+		Page<Drug> paginated = findPaginated(currentPage, size, q);
+		Drugs response = new Drugs();
+		response.getDrugList().addAll(paginated.getContent());
+		response.setCurrentPage(currentPage);
+		response.setTotalPages(paginated.getTotalPages());
+		response.setTotalItems(paginated.getTotalElements());
+		response.setPageSize(paginated.getSize());
+		response.setQuery(normalizeQuery(q));
+		return response;
+	}
 
-private String addPaginationModel(int page, String query, Page<Drug> paginated, Model model) {
-List<Drug> listDrugs = paginated.getContent();
-model.addAttribute("currentPage", page);
-model.addAttribute("totalPages", paginated.getTotalPages());
-model.addAttribute("totalItems", paginated.getTotalElements());
-model.addAttribute("listDrugs", listDrugs);
-model.addAttribute("q", query);
-return "drugs/drugList";
-}
+	private String addPaginationModel(int page, String query, Page<Drug> paginated, Model model) {
+		List<Drug> listDrugs = paginated.getContent();
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", paginated.getTotalPages());
+		model.addAttribute("totalItems", paginated.getTotalElements());
+		model.addAttribute("listDrugs", listDrugs);
+		model.addAttribute("q", query);
+		return "drugs/drugList";
+	}
 
-private Page<Drug> findPaginated(int page, int size, String q) {
-int pageNumber = Math.max(page, 1) - 1;
-int pageSize = size > 0 ? size : DEFAULT_PAGE_SIZE;
-Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("name").ascending());
-String query = normalizeQuery(q);
-if (query.isBlank()) {
-return this.drugs.findAll(pageable);
-}
-return this.drugs.findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase(query, query, pageable);
-}
+	private Page<Drug> findPaginated(int page, int size, String q) {
+		int pageNumber = Math.max(page, 1) - 1;
+		int pageSize = size > 0 ? size : DEFAULT_PAGE_SIZE;
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("name").ascending());
+		String query = normalizeQuery(q);
+		if (query.isBlank()) {
+			return this.drugs.findAll(pageable);
+		}
+		return this.drugs.findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase(query, query, pageable);
+	}
 
-private String normalizeQuery(String q) {
-return q == null ? "" : q.trim();
-}
+	private String normalizeQuery(String q) {
+		return q == null ? "" : q.trim();
+	}
 
 }

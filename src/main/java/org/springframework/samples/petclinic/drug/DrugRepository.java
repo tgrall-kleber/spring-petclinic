@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface DrugRepository extends JpaRepository<Drug, Integer> {
 
-Page<Drug> findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase(String name, String category,
-Pageable pageable);
+	Page<Drug> findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase(String name, String category,
+			Pageable pageable);
 
 }

@@ -23,63 +23,63 @@ import java.util.List;
  */
 public class Drugs {
 
-private List<Drug> drugs;
+	private List<Drug> drugs;
 
-private int currentPage;
+	private int currentPage;
 
-private int totalPages;
+	private int totalPages;
 
-private long totalItems;
+	private long totalItems;
 
-private int pageSize;
+	private int pageSize;
 
-private String query;
+	private String query;
 
-public List<Drug> getDrugList() {
-if (this.drugs == null) {
-this.drugs = new ArrayList<>();
-}
-return this.drugs;
-}
+	public List<Drug> getDrugList() {
+		if (this.drugs == null) {
+			this.drugs = new ArrayList<>();
+		}
+		return this.drugs;
+	}
 
-public int getCurrentPage() {
-return this.currentPage;
-}
+	public int getCurrentPage() {
+		return this.currentPage;
+	}
 
-public void setCurrentPage(int currentPage) {
-this.currentPage = currentPage;
-}
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
 
-public int getTotalPages() {
-return this.totalPages;
-}
+	public int getTotalPages() {
+		return this.totalPages;
+	}
 
-public void setTotalPages(int totalPages) {
-this.totalPages = totalPages;
-}
+	public void setTotalPages(int totalPages) {
+		this.totalPages = totalPages;
+	}
 
-public long getTotalItems() {
-return this.totalItems;
-}
+	public long getTotalItems() {
+		return this.totalItems;
+	}
 
-public void setTotalItems(long totalItems) {
-this.totalItems = totalItems;
-}
+	public void setTotalItems(long totalItems) {
+		this.totalItems = totalItems;
+	}
 
-public int getPageSize() {
-return this.pageSize;
-}
+	public int getPageSize() {
+		return this.pageSize;
+	}
 
-public void setPageSize(int pageSize) {
-this.pageSize = pageSize;
-}
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
 
-public String getQuery() {
-return this.query;
-}
+	public String getQuery() {
+		return this.query;
+	}
 
-public void setQuery(String query) {
-this.query = query;
-}
+	public void setQuery(String query) {
+		this.query = query;
+	}
 
 }
