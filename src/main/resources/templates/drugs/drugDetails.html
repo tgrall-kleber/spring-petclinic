@@ -30,8 +30,7 @@
   </table>
 
   <a th:href="@{/drugs/find}" class="btn btn-primary" th:text="#{findDrugs}">Find Drugs</a>
-  <a th:href="@{/drugs.html(q=${param.q},page=${param.page})}" class="btn btn-default" th:if="${param.page != null}"
-    th:text="#{drugs}">Drugs</a>
+  <a th:href="@{/drugs.html(q=${q},page=${page})}" class="btn btn-default" th:text="#{drugs}">Drugs</a>
 
 </body>
 

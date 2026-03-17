@@ -21,12 +21,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Controller for the read-only drug catalog UI and JSON endpoint.
@@ -57,10 +59,13 @@ class DrugController {
 	}
 
 	@GetMapping("/drugs/{drugId}")
-	public String showDrug(@PathVariable("drugId") int drugId, Model model) {
+	public String showDrug(@PathVariable("drugId") int drugId, @RequestParam(defaultValue = "") String q,
+			@RequestParam(defaultValue = "1") int page, Model model) {
 		Drug drug = this.drugs.findById(drugId)
-			.orElseThrow(() -> new IllegalArgumentException("Drug not found with id: " + drugId));
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drug not found with id: " + drugId));
 		model.addAttribute("drug", drug);
+		model.addAttribute("q", normalizeQuery(q));
+		model.addAttribute("page", Math.max(page, 1));
 		return "drugs/drugDetails";
 	}
 
