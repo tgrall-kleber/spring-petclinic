@@ -53,3 +53,13 @@ CREATE TABLE IF NOT EXISTS visits (
   description VARCHAR(255),
   FOREIGN KEY (pet_id) REFERENCES pets(id)
 ) engine=InnoDB;
+
+CREATE TABLE IF NOT EXISTS drugs (
+  id INT(4) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(80) NOT NULL,
+  category VARCHAR(80) NOT NULL,
+  form VARCHAR(40) NOT NULL,
+  price DECIMAL(5,2) NOT NULL CHECK (price >= 0.00 AND price <= 999.99),
+  description VARCHAR(255),
+  INDEX(name)
+) engine=InnoDB;

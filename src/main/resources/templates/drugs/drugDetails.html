@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'drugs')}">
+
+<body>
+
+  <h2 th:text="#{drugInformation}">Drug Information</h2>
+
+  <table class="table table-striped" th:object="${drug}">
+    <tr>
+      <th th:text="#{name}">Name</th>
+      <td><b th:text="*{name}">Drug Name</b></td>
+    </tr>
+    <tr>
+      <th th:text="#{category}">Category</th>
+      <td th:text="*{category}">Category</td>
+    </tr>
+    <tr>
+      <th th:text="#{form}">Form</th>
+      <td th:text="*{form}">Form</td>
+    </tr>
+    <tr>
+      <th th:text="#{price}">Price</th>
+      <td th:text="${#numbers.formatDecimal(drug.price, 1, 2)}">0.00</td>
+    </tr>
+    <tr>
+      <th th:text="#{description}">Description</th>
+      <td th:text="*{description != null ? description : #messages.msg('none')}">Description</td>
+    </tr>
+  </table>
+
+  <a th:href="@{/drugs/find}" class="btn btn-primary" th:text="#{findDrugs}">Find Drugs</a>
+  <a th:href="@{/drugs.html(q=${q},page=${page})}" class="btn btn-default" th:text="#{drugs}">Drugs</a>
+
+</body>
+
+</html>

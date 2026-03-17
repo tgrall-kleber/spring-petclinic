@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'drugs')}">
+
+<body>
+
+  <h2 th:text="#{findDrugs}">Find Drugs</h2>
+
+  <form th:action="@{/drugs.html}" method="get" class="form-horizontal" id="search-drug-form">
+    <div class="form-group">
+      <div class="control-group" id="drugQueryGroup">
+        <label class="col-sm-2 control-label" for="q" th:text="#{drugSearchQuery}">Name or Category</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="q" name="q" th:value="${q}" size="30" maxlength="80" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" th:text="#{findDrugs}">Find Drugs</button>
+      </div>
+    </div>
+  </form>
+
+</body>
+
+</html>
