@@ -60,6 +60,27 @@
           </li>
 
         </ul>
+
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <button class="btn nav-link dropdown-toggle" type="button" id="languageDropdown"
+              data-bs-toggle="dropdown" aria-expanded="false" aria-label="Select language">
+              <span class="fa fa-globe" aria-hidden="true"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown"
+              th:with="currentLang=${#locale.language}">
+              <li><a class="dropdown-item" th:href="@{''(lang=en)}" th:text="#{lang.en}" th:attr="aria-current=${currentLang == 'en' ? 'true' : null}">English</a></li>
+              <li><a class="dropdown-item" th:href="@{''(lang=de)}" th:text="#{lang.de}" th:attr="aria-current=${currentLang == 'de' ? 'true' : null}">Deutsch</a></li>
+              <li><a class="dropdown-item" th:href="@{''(lang=es)}" th:text="#{lang.es}" th:attr="aria-current=${currentLang == 'es' ? 'true' : null}">Español</a></li>
+              <li><a class="dropdown-item" th:href="@{''(lang=fa)}" th:text="#{lang.fa}" th:attr="aria-current=${currentLang == 'fa' ? 'true' : null}">فارسی</a></li>
+              <li><a class="dropdown-item" th:href="@{''(lang=ko)}" th:text="#{lang.ko}" th:attr="aria-current=${currentLang == 'ko' ? 'true' : null}">한국어</a></li>
+              <li><a class="dropdown-item" th:href="@{''(lang=pt)}" th:text="#{lang.pt}" th:attr="aria-current=${currentLang == 'pt' ? 'true' : null}">Português</a></li>
+              <li><a class="dropdown-item" th:href="@{''(lang=ru)}" th:text="#{lang.ru}" th:attr="aria-current=${currentLang == 'ru' ? 'true' : null}">Русский</a></li>
+              <li><a class="dropdown-item" th:href="@{''(lang=tr)}" th:text="#{lang.tr}" th:attr="aria-current=${currentLang == 'tr' ? 'true' : null}">Türkçe</a></li>
+            </ul>
+          </li>
+        </ul>
+
       </div>
     </div>
   </nav>
