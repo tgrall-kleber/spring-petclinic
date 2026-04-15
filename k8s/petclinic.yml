@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: workload
-          image: dsyer/petclinic
+          image: petclinic:multi-address
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: postgres

@@ -22,16 +22,27 @@ INSERT IGNORE INTO types VALUES (4, 'snake');
 INSERT IGNORE INTO types VALUES (5, 'bird');
 INSERT IGNORE INTO types VALUES (6, 'hamster');
 
-INSERT IGNORE INTO owners VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023');
-INSERT IGNORE INTO owners VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749');
-INSERT IGNORE INTO owners VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763');
-INSERT IGNORE INTO owners VALUES (4, 'Harold', 'Davis', '563 Friendly St.', 'Windsor', '6085553198');
-INSERT IGNORE INTO owners VALUES (5, 'Peter', 'McTavish', '2387 S. Fair Way', 'Madison', '6085552765');
-INSERT IGNORE INTO owners VALUES (6, 'Jean', 'Coleman', '105 N. Lake St.', 'Monona', '6085552654');
-INSERT IGNORE INTO owners VALUES (7, 'Jeff', 'Black', '1450 Oak Blvd.', 'Monona', '6085555387');
-INSERT IGNORE INTO owners VALUES (8, 'Maria', 'Escobito', '345 Maple St.', 'Madison', '6085557683');
-INSERT IGNORE INTO owners VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Madison', '6085559435');
-INSERT IGNORE INTO owners VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487');
+INSERT IGNORE INTO owners VALUES (1, 'George', 'Franklin', '6085551023');
+INSERT IGNORE INTO owners VALUES (2, 'Betty', 'Davis', '6085551749');
+INSERT IGNORE INTO owners VALUES (3, 'Eduardo', 'Rodriquez', '6085558763');
+INSERT IGNORE INTO owners VALUES (4, 'Harold', 'Davis', '6085553198');
+INSERT IGNORE INTO owners VALUES (5, 'Peter', 'McTavish', '6085552765');
+INSERT IGNORE INTO owners VALUES (6, 'Jean', 'Coleman', '6085552654');
+INSERT IGNORE INTO owners VALUES (7, 'Jeff', 'Black', '6085555387');
+INSERT IGNORE INTO owners VALUES (8, 'Maria', 'Escobito', '6085557683');
+INSERT IGNORE INTO owners VALUES (9, 'David', 'Schroeder', '6085559435');
+INSERT IGNORE INTO owners VALUES (10, 'Carlos', 'Estaban', '6085555487');
+
+INSERT IGNORE INTO owner_addresses VALUES (1, 1,  'HOME', '110 W. Liberty St.', 'Madison', 'WI', '53703', 'US', TRUE);
+INSERT IGNORE INTO owner_addresses VALUES (2, 2,  'HOME', '638 Cardinal Ave.', 'Sun Prairie', 'WI', '53590', 'US', TRUE);
+INSERT IGNORE INTO owner_addresses VALUES (3, 3,  'HOME', '2693 Commerce St.', 'McFarland', 'WI', '53558', 'US', TRUE);
+INSERT IGNORE INTO owner_addresses VALUES (4, 4,  'HOME', '563 Friendly St.', 'Windsor', 'WI', '53598', 'US', TRUE);
+INSERT IGNORE INTO owner_addresses VALUES (5, 5,  'HOME', '2387 S. Fair Way', 'Madison', 'WI', '53703', 'US', TRUE);
+INSERT IGNORE INTO owner_addresses VALUES (6, 6,  'HOME', '105 N. Lake St.', 'Monona', 'WI', '53716', 'US', TRUE);
+INSERT IGNORE INTO owner_addresses VALUES (7, 7,  'HOME', '1450 Oak Blvd.', 'Monona', 'WI', '53716', 'US', TRUE);
+INSERT IGNORE INTO owner_addresses VALUES (8, 8,  'HOME', '345 Maple St.', 'Madison', 'WI', '53703', 'US', TRUE);
+INSERT IGNORE INTO owner_addresses VALUES (9, 9,  'HOME', '2749 Blackhawk Trail', 'Madison', 'WI', '53703', 'US', TRUE);
+INSERT IGNORE INTO owner_addresses VALUES (10, 10,  'HOME', '2335 Independence La.', 'Waunakee', 'WI', '53597', 'US', TRUE);
 
 INSERT IGNORE INTO pets VALUES (1, 'Leo', '2000-09-07', 1, 1);
 INSERT IGNORE INTO pets VALUES (2, 'Basil', '2002-08-06', 6, 2);

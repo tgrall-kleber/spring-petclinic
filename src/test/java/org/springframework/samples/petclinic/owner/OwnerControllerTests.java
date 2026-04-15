@@ -73,9 +73,17 @@ class OwnerControllerTests {
 		george.setId(TEST_OWNER_ID);
 		george.setFirstName("George");
 		george.setLastName("Franklin");
-		george.setAddress("110 W. Liberty St.");
-		george.setCity("Madison");
 		george.setTelephone("6085551023");
+		Address homeAddress = new Address();
+		homeAddress.setId(1);
+		homeAddress.setAddressType("HOME");
+		homeAddress.setStreet("110 W. Liberty St.");
+		homeAddress.setCity("Madison");
+		homeAddress.setState("WI");
+		homeAddress.setZipCode("53703");
+		homeAddress.setCountry("US");
+		homeAddress.setPrimary(true);
+		george.getAddresses().add(homeAddress);
 		Pet max = new Pet();
 		PetType dog = new PetType();
 		dog.setName("dog");
@@ -114,19 +122,15 @@ class OwnerControllerTests {
 		mockMvc
 			.perform(post("/owners/new").param("firstName", "Joe")
 				.param("lastName", "Bloggs")
-				.param("address", "123 Caramel Street")
-				.param("city", "London")
 				.param("telephone", "1316761638"))
 			.andExpect(status().is3xxRedirection());
 	}
 
 	@Test
 	void processCreationFormHasErrors() throws Exception {
-		mockMvc
-			.perform(post("/owners/new").param("firstName", "Joe").param("lastName", "Bloggs").param("city", "London"))
+		mockMvc.perform(post("/owners/new").param("firstName", "Joe").param("lastName", "Bloggs"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasErrors("owner"))
-			.andExpect(model().attributeHasFieldErrors("owner", "address"))
 			.andExpect(model().attributeHasFieldErrors("owner", "telephone"))
 			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
 	}
@@ -174,8 +178,6 @@ class OwnerControllerTests {
 			.andExpect(model().attributeExists("owner"))
 			.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
 			.andExpect(model().attribute("owner", hasProperty("firstName", is("George"))))
-			.andExpect(model().attribute("owner", hasProperty("address", is("110 W. Liberty St."))))
-			.andExpect(model().attribute("owner", hasProperty("city", is("Madison"))))
 			.andExpect(model().attribute("owner", hasProperty("telephone", is("6085551023"))))
 			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
 	}
@@ -185,8 +187,6 @@ class OwnerControllerTests {
 		mockMvc
 			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
 				.param("lastName", "Bloggs")
-				.param("address", "123 Caramel Street")
-				.param("city", "London")
 				.param("telephone", "1616291589"))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/owners/{ownerId}"));
@@ -204,11 +204,9 @@ class OwnerControllerTests {
 		mockMvc
 			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
 				.param("lastName", "Bloggs")
-				.param("address", "")
 				.param("telephone", ""))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasErrors("owner"))
-			.andExpect(model().attributeHasFieldErrors("owner", "address"))
 			.andExpect(model().attributeHasFieldErrors("owner", "telephone"))
 			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
 	}
@@ -219,8 +217,6 @@ class OwnerControllerTests {
 			.andExpect(status().isOk())
 			.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
 			.andExpect(model().attribute("owner", hasProperty("firstName", is("George"))))
-			.andExpect(model().attribute("owner", hasProperty("address", is("110 W. Liberty St."))))
-			.andExpect(model().attribute("owner", hasProperty("city", is("Madison"))))
 			.andExpect(model().attribute("owner", hasProperty("telephone", is("6085551023"))))
 			.andExpect(model().attribute("owner", hasProperty("pets", not(empty()))))
 			.andExpect(model().attribute("owner",
@@ -236,8 +232,6 @@ class OwnerControllerTests {
 		owner.setId(2);
 		owner.setFirstName("John");
 		owner.setLastName("Doe");
-		owner.setAddress("Center Street");
-		owner.setCity("New York");
 		owner.setTelephone("0123456789");
 
 		when(owners.findById(pathOwnerId)).thenReturn(Optional.of(owner));

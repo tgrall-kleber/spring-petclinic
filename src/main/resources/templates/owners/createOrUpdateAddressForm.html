@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'owners')}">
+
+<body>
+
+  <h2>
+    <th:block th:if="${address['new']}" th:text="#{new}">New </th:block>
+    <span th:text="#{addresses}">Address</span>
+  </h2>
+  <form th:object="${address}" class="form-horizontal" method="post">
+    <input type="hidden" name="id" th:value="*{id}" />
+    <div class="form-group has-feedback">
+      <div class="form-group">
+        <label class="col-sm-2 control-label" th:text="#{owner}">Owner</label>
+        <div class="col-sm-10">
+          <span th:text="${owner?.firstName + ' ' + owner?.lastName}" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="addressType" th:text="#{address.type}">Type</label>
+        <div class="col-sm-10">
+          <select class="form-control" id="addressType" th:field="*{addressType}">
+            <option value="HOME" th:text="#{address.type.HOME}">Home</option>
+            <option value="WORK" th:text="#{address.type.WORK}">Work</option>
+            <option value="OTHER" th:text="#{address.type.OTHER}">Other</option>
+          </select>
+        </div>
+      </div>
+      <input th:replace="~{fragments/inputField :: input (#{address.street}, 'street', 'text')}" />
+      <input th:replace="~{fragments/inputField :: input (#{address.city}, 'city', 'text')}" />
+      <input th:replace="~{fragments/inputField :: input (#{address.state}, 'state', 'text')}" />
+      <input th:replace="~{fragments/inputField :: input (#{address.zipCode}, 'zipCode', 'text')}" />
+      <input th:replace="~{fragments/inputField :: input (#{address.country}, 'country', 'text')}" />
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="primary" th:text="#{address.primary}">Primary</label>
+        <div class="col-sm-10">
+          <input type="checkbox" id="primary" th:field="*{primary}" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button th:with="text=${address['new']} ? #{addAddress} : #{editAddress}" class="btn btn-primary" type="submit"
+          th:text="${text}">Add Address</button>
+      </div>
+    </div>
+  </form>
+
+</body>
+
+</html>

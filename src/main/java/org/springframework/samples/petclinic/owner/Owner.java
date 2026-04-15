@@ -33,6 +33,10 @@ import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.Valid;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  * Simple JavaBean domain object representing an owner.
@@ -50,37 +54,19 @@ public class Owner extends Person {
 
 	@Column
 	@NotBlank
-	private String address;
-
-	@Column
-	@NotBlank
-	private String city;
-
-	@Column
-	@NotBlank
 	@Pattern(regexp = "\\d{10}", message = "{telephone.invalid}")
 	private String telephone;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "owner_id")
+	@OrderBy("isPrimary DESC, id ASC")
+	@Fetch(FetchMode.SUBSELECT)
+	private final List<@Valid Address> addresses = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner_id")
 	@OrderBy("name")
 	private final List<Pet> pets = new ArrayList<>();
-
-	public String getAddress() {
-		return this.address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getCity() {
-		return this.city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
 
 	public String getTelephone() {
 		return this.telephone;
@@ -88,6 +74,28 @@ public class Owner extends Person {
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+
+	public List<Address> getAddresses() {
+		return this.addresses;
+	}
+
+	public void addAddress(Address address) {
+		if (address.isNew()) {
+			getAddresses().add(address);
+		}
+	}
+
+	/**
+	 * Return the primary address, or the first address if none is marked primary, or
+	 * {@literal null} if no addresses exist.
+	 * @return the primary {@link Address} or {@literal null}
+	 */
+	public Address getPrimaryAddress() {
+		return this.addresses.stream()
+			.filter(Address::isPrimary)
+			.findFirst()
+			.orElse(this.addresses.isEmpty() ? null : this.addresses.get(0));
 	}
 
 	public List<Pet> getPets() {
@@ -150,8 +158,6 @@ public class Owner extends Person {
 			.append("new", this.isNew())
 			.append("lastName", this.getLastName())
 			.append("firstName", this.getFirstName())
-			.append("address", this.address)
-			.append("city", this.city)
 			.append("telephone", this.telephone)
 			.toString();
 	}
