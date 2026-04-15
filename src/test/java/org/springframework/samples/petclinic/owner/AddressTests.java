@@ -15,11 +15,23 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AddressTests {
+
+	private Validator createValidator() {
+		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+		localValidatorFactoryBean.afterPropertiesSet();
+		return localValidatorFactoryBean;
+	}
 
 	@Test
 	void shouldSupportRoundTripPropertyAccess() {
@@ -44,6 +56,28 @@ class AddressTests {
 	@Test
 	void shouldDefaultPrimaryToFalse() {
 		assertThat(new Address().isPrimary()).isFalse();
+	}
+
+	@Test
+	void shouldAssociateOwner() {
+		Owner owner = new Owner();
+		Address address = new Address();
+		address.setOwner(owner);
+
+		assertThat(address.getOwner()).isSameAs(owner);
+	}
+
+	@Test
+	void shouldValidateBlankStreet() {
+		Address address = new Address();
+		address.setAddressType(AddressType.HOME);
+		address.setStreet("");
+		address.setCity("Springfield");
+
+		Set<ConstraintViolation<Address>> constraintViolations = createValidator().validate(address);
+
+		assertThat(constraintViolations).extracting(violation -> violation.getPropertyPath().toString())
+			.contains("street");
 	}
 
 }

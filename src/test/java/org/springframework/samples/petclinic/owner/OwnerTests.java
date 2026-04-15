@@ -48,6 +48,50 @@ class OwnerTests {
 		assertThat(new Owner().getPrimaryAddress()).isNull();
 	}
 
+	@Test
+	void shouldDeriveLegacyAddressFromPrimaryAddress() {
+		Owner owner = new Owner();
+		owner.addAddress(address(AddressType.HOME, "10 Main St", "Springfield", true));
+
+		assertThat(owner.getAddress()).isEqualTo("10 Main St");
+		assertThat(owner.getCity()).isEqualTo("Springfield");
+	}
+
+	@Test
+	void shouldReturnNullLegacyAddressWhenNoAddressesExist() {
+		Owner owner = new Owner();
+
+		assertThat(owner.getAddress()).isNull();
+		assertThat(owner.getCity()).isNull();
+	}
+
+	@Test
+	void shouldCreatePrimaryAddressFromLegacySetters() {
+		Owner owner = new Owner();
+		owner.setAddress("42 Elm Street");
+		owner.setCity("Shelbyville");
+
+		assertThat(owner.getAddress()).isEqualTo("42 Elm Street");
+		assertThat(owner.getCity()).isEqualTo("Shelbyville");
+		assertThat(owner.getAddresses()).hasSize(1);
+		assertThat(owner.getPrimaryAddress()).isNotNull();
+		assertThat(owner.getPrimaryAddress().isPrimary()).isTrue();
+		assertThat(owner.getPrimaryAddress().getAddressType()).isEqualTo(AddressType.HOME);
+	}
+
+	@Test
+	void shouldUpdateExistingPrimaryAddressFromLegacySetters() {
+		Owner owner = new Owner();
+		owner.addAddress(address(AddressType.HOME, "10 Main St", "Springfield", true));
+
+		owner.setAddress("99 New Road");
+		owner.setCity("Capital City");
+
+		assertThat(owner.getAddresses()).hasSize(1);
+		assertThat(owner.getAddress()).isEqualTo("99 New Road");
+		assertThat(owner.getCity()).isEqualTo("Capital City");
+	}
+
 	private Address address(AddressType type, String street, String city, boolean primary) {
 		Address address = new Address();
 		address.setAddressType(type);
