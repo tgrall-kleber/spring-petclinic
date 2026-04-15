@@ -23,6 +23,14 @@
       <th th:text="#{telephone}">Telephone</th>
       <td th:text="*{telephone}"></td>
     </tr>
+    <tr>
+      <th th:text="#{address}">Address</th>
+      <td th:text="*{address}"></td>
+    </tr>
+    <tr>
+      <th th:text="#{city}">City</th>
+      <td th:text="*{city}"></td>
+    </tr>
   </table>
 
   <a th:href="@{__${owner.id}__/edit}" class="btn btn-primary" th:text="#{editOwner}">Edit
@@ -30,10 +38,7 @@
   <a th:href="@{__${owner.id}__/pets/new}" class="btn btn-primary" th:text="#{addNewPet}">Add
     New Pet</a>
 
-  <br />
-  <br />
-  <br />
-  <h2 th:text="#{addresses}">Addresses</h2>
+  <h2 class="mt-4" th:text="#{addresses}">Addresses</h2>
 
   <table class="table table-striped" th:if="${!owner.addresses.isEmpty()}">
     <thead>
@@ -50,14 +55,19 @@
     </thead>
     <tbody>
       <tr th:each="addr : ${owner.addresses}">
-        <td th:text="#{|address.type.${addr.addressType}|}"></td>
+        <td th:text="#{|address.type.${addr.addressType.name()}|}"></td>
         <td th:text="${addr.street}"></td>
         <td th:text="${addr.city}"></td>
         <td th:text="${addr.state}"></td>
         <td th:text="${addr.zipCode}"></td>
         <td th:text="${addr.country}"></td>
         <td><span th:if="${addr.primary}" class="fa fa-check"></span></td>
-        <td><a th:href="@{__${owner.id}__/addresses/__${addr.id}__/edit}" th:text="#{editAddress}">Edit</a></td>
+        <td>
+          <a th:href="@{__${owner.id}__/addresses/__${addr.id}__/edit}" th:text="#{editAddress}">Edit</a>
+          <form th:action="@{__${owner.id}__/addresses/__${addr.id}__/delete}" class="d-inline" method="post">
+            <button class="btn btn-link p-0 align-baseline" th:text="#{deleteAddress}" type="submit">Delete</button>
+          </form>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -65,10 +75,7 @@
 
   <a th:href="@{__${owner.id}__/addresses/new}" class="btn btn-primary" th:text="#{addAddress}">Add Address</a>
 
-  <br />
-  <br />
-  <br />
-  <h2 th:text="#{petsAndVisits}">Pets and Visits</h2>
+  <h2 class="mt-4" th:text="#{petsAndVisits}">Pets and Visits</h2>
 
   <table class="table table-striped">
 

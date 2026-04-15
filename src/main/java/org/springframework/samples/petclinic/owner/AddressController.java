@@ -57,16 +57,15 @@ class AddressController {
 	}
 
 	@ModelAttribute("address")
-	public Address findAddress(@PathVariable("ownerId") int ownerId,
+	public Address findAddress(@ModelAttribute("owner") Owner owner, @PathVariable("ownerId") int ownerId,
 			@PathVariable(name = "addressId", required = false) Integer addressId) {
 
 		if (addressId == null) {
 			Address address = new Address();
-			address.setAddressType("HOME");
+			address.setAddressType(AddressType.HOME);
 			return address;
 		}
 
-		Owner owner = findOwner(ownerId);
 		return owner.getAddresses()
 			.stream()
 			.filter(a -> Objects.equals(a.getId(), addressId))
@@ -106,29 +105,23 @@ class AddressController {
 
 	@PostMapping("/addresses/{addressId}/edit")
 	public String processUpdateForm(Owner owner, @Valid Address address, BindingResult result,
-			@PathVariable("addressId") int addressId, RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) {
 
 		if (result.hasErrors()) {
 			return VIEWS_ADDRESS_CREATE_OR_UPDATE_FORM;
 		}
 
-		// Find the existing address through the owner (enforce ownership)
-		Address existingAddress = owner.getAddresses()
-			.stream()
-			.filter(a -> Objects.equals(a.getId(), addressId))
-			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("Address not found with id: " + addressId));
-
-		existingAddress.setAddressType(address.getAddressType());
-		existingAddress.setStreet(address.getStreet());
-		existingAddress.setCity(address.getCity());
-		existingAddress.setState(address.getState());
-		existingAddress.setZipCode(address.getZipCode());
-		existingAddress.setCountry(address.getCountry());
-		existingAddress.setPrimary(address.isPrimary());
-
 		this.owners.save(owner);
 		redirectAttributes.addFlashAttribute("message", "Address details have been updated");
+		return "redirect:/owners/{ownerId}";
+	}
+
+	@PostMapping("/addresses/{addressId}/delete")
+	public String processDeleteForm(Owner owner, @ModelAttribute("address") Address address,
+			RedirectAttributes redirectAttributes) {
+		owner.getAddresses().remove(address);
+		this.owners.save(owner);
+		redirectAttributes.addFlashAttribute("message", "Address has been deleted");
 		return "redirect:/owners/{ownerId}";
 	}
 

@@ -21,9 +21,9 @@
         <label class="col-sm-2 control-label" for="addressType" th:text="#{address.type}">Type</label>
         <div class="col-sm-10">
           <select class="form-control" id="addressType" th:field="*{addressType}">
-            <option value="HOME" th:text="#{address.type.HOME}">Home</option>
-            <option value="WORK" th:text="#{address.type.WORK}">Work</option>
-            <option value="OTHER" th:text="#{address.type.OTHER}">Other</option>
+            <option th:value="${T(org.springframework.samples.petclinic.owner.AddressType).HOME}" th:text="#{address.type.HOME}">Home</option>
+            <option th:value="${T(org.springframework.samples.petclinic.owner.AddressType).WORK}" th:text="#{address.type.WORK}">Work</option>
+            <option th:value="${T(org.springframework.samples.petclinic.owner.AddressType).OTHER}" th:text="#{address.type.OTHER}">Other</option>
           </select>
         </div>
       </div>

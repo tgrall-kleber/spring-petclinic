@@ -19,8 +19,15 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * Simple JavaBean domain object representing an address belonging to an {@link Owner}.
@@ -32,34 +39,43 @@ import jakarta.validation.constraints.NotBlank;
 public class Address extends BaseEntity {
 
 	@Column
-	@NotBlank
-	private String addressType;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private AddressType addressType;
 
-	@Column
+	@Column(length = 255)
 	@NotBlank
+	@Size(max = 255)
 	private String street;
 
-	@Column
+	@Column(length = 80)
 	@NotBlank
+	@Size(max = 80)
 	private String city;
 
-	@Column
+	@Column(length = 80)
+	@Size(max = 80)
 	private String state;
 
 	@Column
 	private String zipCode;
 
-	@Column
+	@Column(length = 80)
+	@Size(max = 80)
 	private String country;
 
 	@Column
 	private boolean isPrimary;
 
-	public String getAddressType() {
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "owner_id", nullable = false)
+	private Owner owner;
+
+	public AddressType getAddressType() {
 		return this.addressType;
 	}
 
-	public void setAddressType(String addressType) {
+	public void setAddressType(AddressType addressType) {
 		this.addressType = addressType;
 	}
 
@@ -109,6 +125,14 @@ public class Address extends BaseEntity {
 
 	public void setPrimary(boolean primary) {
 		this.isPrimary = primary;
+	}
+
+	public Owner getOwner() {
+		return this.owner;
+	}
+
+	public void setOwner(Owner owner) {
+		this.owner = owner;
 	}
 
 }

@@ -76,13 +76,14 @@ class OwnerControllerTests {
 		george.setTelephone("6085551023");
 		Address homeAddress = new Address();
 		homeAddress.setId(1);
-		homeAddress.setAddressType("HOME");
+		homeAddress.setAddressType(AddressType.HOME);
 		homeAddress.setStreet("110 W. Liberty St.");
 		homeAddress.setCity("Madison");
 		homeAddress.setState("WI");
 		homeAddress.setZipCode("53703");
 		homeAddress.setCountry("US");
 		homeAddress.setPrimary(true);
+		homeAddress.setOwner(george);
 		george.getAddresses().add(homeAddress);
 		Pet max = new Pet();
 		PetType dog = new PetType();

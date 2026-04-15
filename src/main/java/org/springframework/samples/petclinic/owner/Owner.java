@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.samples.petclinic.model.Person;
+import org.springframework.util.StringUtils;
 import org.springframework.util.Assert;
 
 import jakarta.persistence.CascadeType;
@@ -31,6 +32,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.Valid;
@@ -57,8 +59,7 @@ public class Owner extends Person {
 	@Pattern(regexp = "\\d{10}", message = "{telephone.invalid}")
 	private String telephone;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name = "owner_id")
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderBy("isPrimary DESC, id ASC")
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<@Valid Address> addresses = new ArrayList<>();
@@ -82,6 +83,10 @@ public class Owner extends Person {
 
 	public void addAddress(Address address) {
 		if (address.isNew()) {
+			if (address.getAddressType() == null) {
+				address.setAddressType(AddressType.HOME);
+			}
+			address.setOwner(this);
 			getAddresses().add(address);
 		}
 	}
@@ -96,6 +101,50 @@ public class Owner extends Person {
 			.filter(Address::isPrimary)
 			.findFirst()
 			.orElse(this.addresses.isEmpty() ? null : this.addresses.get(0));
+	}
+
+	@Transient
+	public String getAddress() {
+		Address primaryAddress = getPrimaryAddress();
+		return (primaryAddress != null) ? primaryAddress.getStreet() : null;
+	}
+
+	public void setAddress(String address) {
+		syncLegacyAddress(address, null);
+	}
+
+	@Transient
+	public String getCity() {
+		Address primaryAddress = getPrimaryAddress();
+		return (primaryAddress != null) ? primaryAddress.getCity() : null;
+	}
+
+	public void setCity(String city) {
+		syncLegacyAddress(null, city);
+	}
+
+	private void syncLegacyAddress(String street, String city) {
+		String resolvedStreet = (street != null) ? street : getAddress();
+		String resolvedCity = (city != null) ? city : getCity();
+		if (!StringUtils.hasText(resolvedStreet) && !StringUtils.hasText(resolvedCity)) {
+			return;
+		}
+
+		Address primaryAddress = getPrimaryAddress();
+		if (primaryAddress == null) {
+			primaryAddress = new Address();
+			primaryAddress.setAddressType(AddressType.HOME);
+			primaryAddress.setPrimary(true);
+			primaryAddress.setOwner(this);
+			getAddresses().add(primaryAddress);
+		}
+
+		if (street != null) {
+			primaryAddress.setStreet(street);
+		}
+		if (city != null) {
+			primaryAddress.setCity(city);
+		}
 	}
 
 	public List<Pet> getPets() {

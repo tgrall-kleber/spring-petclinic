@@ -30,6 +30,7 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.petclinic.owner.Address;
+import org.springframework.samples.petclinic.owner.AddressType;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.samples.petclinic.owner.Pet;
@@ -117,7 +118,7 @@ class ClinicServiceTests {
 		owner.setTelephone("4444444444");
 
 		Address address = new Address();
-		address.setAddressType("HOME");
+		address.setAddressType(AddressType.HOME);
 		address.setStreet("4, Evans Street");
 		address.setCity("Wollongong");
 		address.setPrimary(true);
