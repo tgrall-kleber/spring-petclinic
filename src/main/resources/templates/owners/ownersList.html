@@ -10,8 +10,8 @@
     <thead>
       <tr>
         <th th:text="#{name}" style="width: 150px;">Name</th>
-        <th th:text="#{address}" style="width: 200px;">Address</th>
-        <th th:text="#{city}">City</th>
+        <th th:text="#{address.street}" style="width: 200px;">Street</th>
+        <th th:text="#{address.city}">City</th>
         <th th:text="#{telephone}" style="width: 120px">Telephone</th>
         <th th:text="#{pets}">Pets</th>
       </tr>
@@ -21,8 +21,8 @@
         <td>
           <a th:href="@{/owners/__${owner.id}__}" th:text="${owner.firstName + ' ' + owner.lastName}" /></a>
         </td>
-        <td th:text="${owner.address}" />
-        <td th:text="${owner.city}" />
+        <td th:text="${owner.primaryAddress != null ? owner.primaryAddress.street : ''}" />
+        <td th:text="${owner.primaryAddress != null ? owner.primaryAddress.city : ''}" />
         <td th:text="${owner.telephone}" />
         <td><span th:text="${#strings.listJoin(owner.pets, ', ')}" /></td>
       </tr>
