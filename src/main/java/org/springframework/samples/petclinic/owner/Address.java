@@ -38,17 +38,17 @@ import jakarta.validation.constraints.Size;
 @Table(name = "owner_addresses")
 public class Address extends BaseEntity {
 
-	@Column
+	@Column(nullable = false)
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private AddressType addressType;
 
-	@Column(length = 255)
+	@Column(length = 255, nullable = false)
 	@NotBlank
 	@Size(max = 255)
 	private String street;
 
-	@Column(length = 80)
+	@Column(length = 80, nullable = false)
 	@NotBlank
 	@Size(max = 80)
 	private String city;
@@ -57,7 +57,8 @@ public class Address extends BaseEntity {
 	@Size(max = 80)
 	private String state;
 
-	@Column
+	@Column(length = 20)
+	@Size(max = 20)
 	private String zipCode;
 
 	@Column(length = 80)

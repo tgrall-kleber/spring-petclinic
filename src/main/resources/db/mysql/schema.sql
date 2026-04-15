@@ -36,9 +36,9 @@ CREATE TABLE IF NOT EXISTS owners (
 CREATE TABLE IF NOT EXISTS owner_addresses (
   id INT(4) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   owner_id INT(4) UNSIGNED NOT NULL,
-  address_type VARCHAR(30),
-  street VARCHAR(255),
-  city VARCHAR(80),
+  address_type VARCHAR(30) NOT NULL,
+  street VARCHAR(255) NOT NULL,
+  city VARCHAR(80) NOT NULL,
   state VARCHAR(80),
   zip_code VARCHAR(20),
   country VARCHAR(80),

@@ -80,4 +80,18 @@ class AddressTests {
 			.contains("street");
 	}
 
+	@Test
+	void shouldValidateZipCodeLength() {
+		Address address = new Address();
+		address.setAddressType(AddressType.HOME);
+		address.setStreet("742 Evergreen Terrace");
+		address.setCity("Springfield");
+		address.setZipCode("123456789012345678901");
+
+		Set<ConstraintViolation<Address>> constraintViolations = createValidator().validate(address);
+
+		assertThat(constraintViolations).extracting(violation -> violation.getPropertyPath().toString())
+			.contains("zipCode");
+	}
+
 }
