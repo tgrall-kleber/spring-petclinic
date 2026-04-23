@@ -19,7 +19,6 @@ package org.springframework.samples.petclinic.system;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,15 +32,12 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @AutoConfigureTestRestTemplate
 class WelcomeControllerIntegrationTests {
 
-	@Value("${local.server.port}")
-	private int port;
-
 	@Autowired
 	private TestRestTemplate rest;
 
 	@Test
 	void welcomePageSupportsFinnishLocale() {
-		ResponseEntity<String> response = rest.getForEntity("http://localhost:" + port + "/?lang=fi", String.class);
+		ResponseEntity<String> response = rest.getForEntity("/?lang=fi", String.class);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull().contains("Tervetuloa");
